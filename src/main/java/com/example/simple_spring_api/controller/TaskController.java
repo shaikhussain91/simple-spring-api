@@ -101,7 +101,7 @@ public class TaskController {
      * @throws TaskNotFoundException
      */
 
-    @GetMapping("{/taskId}")
+    @GetMapping("/{taskId}")
     public ResponseEntity<ResponseDto> getTaskById(@PathVariable long taskId) {
         Task task = taskService.getTaskById(taskId);
         if (task == null) {
