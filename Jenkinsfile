@@ -1,11 +1,11 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.6-eclipse-temurin-21' // Maven + JDK 21 image from Docker Hub
-            args '-v /root/.m2:/root/.m2'         // Mount local Maven repo for caching
-        }
-    }
+    agent any
 
+    tools {
+        jdk 'jdk-21'       // Name of JDK 21 installation configured in Jenkins
+        maven 'maven-3.9'  // Name of Maven installation configured in Jenkins
+    }
+    
     environment {
         MAVEN_OPTS = "-Dmaven.test.failure.ignore=false"
     }
