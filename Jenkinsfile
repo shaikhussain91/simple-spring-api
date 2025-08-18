@@ -12,7 +12,7 @@ pipeline{
     }
 
     stages {
-        // stage to prepare the environment
+        
 
         // stage to checkout the code from the repository
          stage('Checkout') {
