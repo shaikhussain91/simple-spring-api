@@ -2,66 +2,39 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk-21'       // Name of JDK 21 installation configured in Jenkins
-        maven 'maven-3.9'  // Name of Maven installation configured in Jenkins
-    }
-    
-    environment {
-        MAVEN_OPTS = "-Dmaven.test.failure.ignore=false"
+        // Specify the JDK and Maven tool to be used
+        // These must be configured in Jenkins' Global Tool Configuration
+        jdk 'jdk-21'
+        maven 'maven-3.8.4'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo "Checking out source code..."
-                checkout scm
+                echo 'Cloning repository...'
+                git 'https://github.com/ashish-panicker/simple-spring-api.git'
             }
         }
-
         stage('Build') {
             steps {
-                echo "Building with Maven + JDK 21 (inside Docker)..."
-                sh 'mvn clean install -DskipTests'
+                echo 'Building with Maven...'
+                sh 'mvn clean install'
             }
         }
-
         stage('Test') {
             steps {
-                echo "Running tests..."
+                echo 'Running tests...'
                 sh 'mvn test'
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
         }
-
-        stage('Package') {
-            steps {
-                echo "Packaging app..."
-                sh 'mvn package'
-            }
-        }
-
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
             steps {
-                echo "Deploying artifact..."
-                sh 'mvn deploy'
+                echo 'Deploying to a server...'
+                // A real-world deploy step would copy the artifact
+                // and start the application on a remote server.
+                // For example, using a shell script or a plugin.
+                echo 'Deployment successful!'
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Build succeeded inside Docker with JDK 21!"
-        }
-        failure {
-            echo "Build failed!"
         }
     }
 }
-// Jenkinsfile for building a Java application with Maven and JDK 21 inside a Docker container
