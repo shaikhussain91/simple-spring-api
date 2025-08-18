@@ -13,7 +13,7 @@ pipeline {
 
     environment {
         // define the SonarQube server URL and credentials
-        SONARQUBE_SERVER = 'SONARCLOUD'
+        SONARQUBE_SERVER = 'SonarCloud'
         SONAR_PROJECT_KEY = 'ashish-panicker_simple-spring-api'
         SONAR_PROJECT_NAME = 'simple-spring-api'
     }
