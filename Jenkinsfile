@@ -26,7 +26,7 @@ pipeline {
                 echo 'Cloning repository...'
                 // by default jenkins will use the master branch
                 // if you want to use a different branch, specify it here
-                git branch: 'main', url: 'https://github.com/shaikhusssain91/simple-spring-api.git'
+                git branch: 'main', url: 'https://github.com/shaikhussain91/simple-spring-api.git'
             }
         }
 
