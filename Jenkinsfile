@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git 'https://github.com/ashish-panicker/simple-spring-api.git'
+                git branch: 'main' url: 'https://github.com/ashish-panicker/simple-spring-api.git'
             }
         }
         stage('Build') {
@@ -23,6 +23,11 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh 'mvn test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
             }
         }
         stage('Deploy') {
