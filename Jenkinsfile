@@ -14,9 +14,9 @@ pipeline {
     environment {
         // define the SonarQube server URL and credentials
         SONARQUBE_SERVER = 'SonarCloud'
-        SONAR_PROJECT_KEY = 'ashish-panicker_simple-spring-api'
-        SONAR_PROJECT_NAME = 'simple-spring-api'
-        SONAR_ORGANIZATION = 'ashish-panicker'
+        SONAR_PROJECT_KEY = 'shaikhussain91'
+        SONAR_PROJECT_NAME = 'shaikhussain91_simple-spring-api'
+        SONAR_ORGANIZATION = 'shaikhussain91'
     }
 
     stages {
@@ -26,7 +26,7 @@ pipeline {
                 echo 'Cloning repository...'
                 // by default jenkins will use the master branch
                 // if you want to use a different branch, specify it here
-                git branch: 'main', url: 'https://github.com/ashish-panicker/simple-spring-api.git'
+                git branch: 'main', url: 'https://github.com/shaikhusssain91/simple-spring-api.git'
             }
         }
 
