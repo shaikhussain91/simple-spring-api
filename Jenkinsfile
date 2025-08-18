@@ -13,7 +13,6 @@ pipeline{
 
     stages {
         
-
         // stage to checkout the code from the repository
          stage('Checkout') {
             steps {
