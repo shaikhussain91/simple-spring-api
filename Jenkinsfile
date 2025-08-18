@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'main' url: 'https://github.com/ashish-panicker/simple-spring-api.git'
+                git branch: 'main', url: 'https://github.com/ashish-panicker/simple-spring-api.git'
             }
         }
         stage('Build') {
