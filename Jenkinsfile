@@ -14,9 +14,21 @@ pipeline {
     environment {
         // define the SonarQube server URL and credentials
         SONARQUBE_SERVER = 'SonarCloud'
-        SONAR_PROJECT_KEY = 'shaikhussain91'
-        SONAR_PROJECT_NAME = 'shaikhussain91_simple-spring-api'
+        SONAR_PROJECT_KEY = 'shaikhussain91_simple-spring-api'
+        SONAR_PROJECT_NAME = 'simple-spring-api'
         SONAR_ORGANIZATION = 'shaikhussain91'
+        // --- Docker / Deploy ---
+        APP_NAME              = 'simple-spring-api'
+        // <username>/<repo>
+        DOCKER_IMAGE          = "shaikhussain9/${APP_NAME}"    
+        CONTAINER_NAME        = 'simple-spring-api'
+        // container port your app listens on
+        APP_PORT              = '9595'                          
+        // Jenkins credential (username+password) for registry login
+        DOCKERHUB_CREDENTIALS = 'docker-credentials'
+        // Optional: set a host port different from container port (e.g., '9595:9595')
+        HOST_PORT_MAPPING     = '9595:9595'
+
     }
 
     stages {
@@ -82,15 +94,43 @@ pipeline {
                 }
             }
         }
-
-        // stage to deploy the application
-        // this stage will deploy the application to a server
-        stage('Deploy') {
+        
+        // stage to build the Docker image
+        stage('Build Docker Image') {
             steps {
-                echo 'Deploying to a server...'
-                echo 'Deployment successful!'
+                script {
+                    // Use a deterministic image tag per build (BUILD_NUMBER) and also tag as 'latest'
+                    env.IMAGE_TAG = "${env.BUILD_NUMBER}"
+                }
+                sh """
+                    echo "Building Docker image: ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                    docker build --pull -t ${DOCKER_IMAGE}:${IMAGE_TAG} -t ${DOCKER_IMAGE}:latest .
+                """
             }
         }
+
+         stage('Docker Push Image') {
+            // when {
+            //     branch 'main'
+            // }
+            steps {
+                echo "Logging into registry and pushing ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKERHUB_CREDENTIALS}",
+                    usernameVariable: 'DOCKERHUB_USERNAME',
+                    passwordVariable: 'DOCKERHUB_PASSWORD'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                        docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                        docker push ${DOCKER_IMAGE}:latest
+                        docker logout || true
+                    '''
+                }
+            }
+        }
+
+                 
     }
 
     post {
